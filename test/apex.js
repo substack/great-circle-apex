@@ -12,6 +12,8 @@ var malaga = [-4.42,36.72]
 var buenosAires = [-58.38,-34.61]
 var lagos = [3.40,6.45]
 var reykjavik = [-21.90,64.14]
+var tokyo = [139.69,35.69]
+var nyc = [-74.01,40.71]
 
 test('seattle to frankfurt', function (t) {
   var A = seattle
@@ -114,6 +116,48 @@ test('auckland to reykjavik', function (t) {
   var d = hdist(p,best)
   t.equal(alat, p[1], 'lat-only exactly the same as apex[1] (with no float jitter)')
   t.ok(p[1] > 78, `latitude > +78 (=${p[1].toFixed(4)})`)
+  t.ok(d < 20_000, `iterative distance (n=${n}) < 20km from formula result (d=${d.toFixed(1)})`)
+  t.end()
+})
+
+test('tokyo to seattle', function (t) {
+  var A = tokyo
+  var B = seattle
+  var p = gcApex([],A,B)
+  var alat = gcApexLat(A,B)
+  var n = 500
+  var best = [0,-Infinity]
+  for (var i = 0; i < n; i++) {
+    geolerp(v0,A,B,i/(n-1))
+    if (v0[1] > best[1]) {
+      best[0] = v0[0]
+      best[1] = v0[1]
+    }
+  }
+  var d = hdist(p,best)
+  t.equal(alat, p[1], 'lat-only exactly the same as apex[1] (with no float jitter)')
+  t.ok(p[1] > 54, `latitude > +54 (=${p[1].toFixed(4)})`)
+  t.ok(d < 20_000, `iterative distance (n=${n}) < 20km from formula result (d=${d.toFixed(1)})`)
+  t.end()
+})
+
+test('nyc to tokyo', function (t) {
+  var A = nyc
+  var B = tokyo
+  var p = gcApex([],A,B)
+  var alat = gcApexLat(A,B)
+  var n = 500
+  var best = [0,-Infinity]
+  for (var i = 0; i < n; i++) {
+    geolerp(v0,A,B,i/(n-1))
+    if (v0[1] > best[1]) {
+      best[0] = v0[0]
+      best[1] = v0[1]
+    }
+  }
+  var d = hdist(p,best)
+  t.equal(alat, p[1], 'lat-only exactly the same as apex[1] (with no float jitter)')
+  t.ok(p[1] > 60, `latitude > +65 (=${p[1].toFixed(4)})`)
   t.ok(d < 20_000, `iterative distance (n=${n}) < 20km from formula result (d=${d.toFixed(1)})`)
   t.end()
 })
