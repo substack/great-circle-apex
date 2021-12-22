@@ -1,0 +1,14 @@
+{
+  "name": "great-circle-apex",
+  "version": "1.0.0",
+  "description": "calculate the apex (point of minimum or maximum latitude) of a great circle arc",
+  "devDependencies": {
+    "geolerp": "^1.0.0",
+    "haversine-distance": "^1.2.1",
+    "tape": "^5.3.2"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "license": "bsd"
+}
