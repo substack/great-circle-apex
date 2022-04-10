@@ -1,4 +1,10 @@
-module.exports = function gcApex(out, p0, p1) {
+module.exports = function gcApex(out, p0, p1, epsilon) {
+  if (epsilon === undefined) epsilon = 1e-12
+  if (Math.abs(p0[1]) < epsilon && Math.abs(p1[1]) < epsilon) {
+    out[0] = (p0[0] + p1[0])*0.5
+    out[1] = (p0[1] + p1[1])*0.5
+    return out
+  }
   var lon0 = p0[0]/180*Math.PI
   var lat0 = p0[1]/180*Math.PI
   var lon1 = p1[0]/180*Math.PI

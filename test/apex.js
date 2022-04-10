@@ -161,3 +161,44 @@ test('nyc to tokyo', function (t) {
   t.ok(d < 20_000, `iterative distance (n=${n}) < 20km from formula result (d=${d.toFixed(1)})`)
   t.end()
 })
+
+test('two points on the equator', function (t) {
+  var A = [-90,0]
+  var B = [50,0]
+  var p = gcApex([],A,B)
+  var alat = gcApexLat(A,B)
+  var n = 500
+  var best = [0,-Infinity]
+  for (var i = 0; i < n; i++) {
+    geolerp(v0,A,B,i/(n-1))
+    if (v0[1] > best[1]) {
+      best[0] = v0[0]
+      best[1] = v0[1]
+    }
+  }
+  var d = hdist(p,best)
+  t.equal(alat, p[1], 'lat-only exactly the same as apex[1] (with no float jitter)')
+  t.ok(Math.abs(p[0] - (A[0]+B[0])*0.5) < 1e-8, 'equatorial apex at midpoint')
+  t.ok(Math.abs(p[1]) < 1e-8, `equatorial latitude`)
+  t.end()
+})
+
+test('two points on the north pole', function (t) {
+  var A = [-90,90]
+  var B = [50,90]
+  var p = gcApex([],A,B)
+  var alat = gcApexLat(A,B)
+  var n = 500
+  var best = [0,-Infinity]
+  for (var i = 0; i < n; i++) {
+    geolerp(v0,A,B,i/(n-1))
+    if (v0[1] > best[1]) {
+      best[0] = v0[0]
+      best[1] = v0[1]
+    }
+  }
+  var d = hdist(p,best)
+  t.equal(alat, p[1], 'lat-only exactly the same as apex[1] (with no float jitter)')
+  t.ok(Math.abs(p[1]-90) < 1e-8, `north pole`)
+  t.end()
+})
